@@ -37,7 +37,7 @@
   let addressGenerationRequest = false;
   let addressGenerated = false;
   let addresses = [];
-  let channelState = createChannel(mamSeed, 2, mode);
+  let channelState
   let balance = 0;
   let payoutAddress = "";
   let payoutValue = 0;
@@ -46,16 +46,25 @@
   let transactionHash = "";
   let mwm = 9;
 
-  let initChannelState = createChannel(mamSeed, 2, mode);
-  let initialRoot = channelRoot(initChannelState);
-  let latestRoot = initialRoot;
-  console.log("initialRoot", initialRoot);
+  let initChannelState
+  let initialRoot
+  let latestRoot
   let mamRoot = "";
   let lastFetchedMessage;
 
   setInterval(() => fetchMam(), 10000);
   let fetchMAMrunning = false;
+  let initialize = true
   async function fetchMam() {
+    if(initialize){
+      console.log("initialize");
+      channelState = createChannel(mamSeed, 2, mode);
+      initChannelState = createChannel(mamSeed, 2, mode);
+      initialRoot = channelRoot(initChannelState);
+      latestRoot = initialRoot
+      console.log("initialRoot", initialRoot);
+      initialize = false
+    }
     if (fetchMAMrunning) {
       console.log("fetchMAM runs already");
       return;
